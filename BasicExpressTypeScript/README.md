@@ -1,4 +1,4 @@
-# basicexpresstypescript
+# Basic Express Typescript
 
 To install dependencies:
 
