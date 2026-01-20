@@ -32,3 +32,12 @@ functiontype()
 
 import { classObject } from './topics/class_object'
 classObject()
+
+import { generic } from './topics/generic'
+generic()
+
+import { asyncpromise } from './topics/async_promise'
+asyncpromise()
+
+import { asyncawait } from './topics/async_await'
+asyncawait()
