@@ -1,64 +1,23 @@
 import express from 'express'
 import { Request, Response } from 'express'
+import * as productController from '../controller/productController'
+
 //สร้าง instance route ของ express
 const router = express.Router()
 
-// กำหนด interface สำหรับ product
-interface Product {
-    id: string
-    name: string
-    price: number
-}
+// GET /products แสดงสินค้าทั้งหมด
+router.get('/products', productController.getAllProducts)
 
-const products: Product[] = []
+// GET /products/:id แสดงสินค้าตาม id
+router.get('/products/:id', productController.getProductById)
 
-// GET /products สำหรับดึงสินค้าทั้งหมด
-router.get('/products', (_: Request, res: Response): void => {
-    res.json(products)
-})
+// POST /products สร้างสินค้าเพิ่ม
+router.post('/products', productController.createProduct)
 
-// GET /product/:id สำหรับดึงข้อมูลตาม id
-router.get('/products/:id', (req: Request, res: Response): void => {
-    const id = req.params.id
-    const product = products.find((product => product.id === id))
-    // ถ้าไม่พบข้อมูล
-    if (!product) {
-        res.status(404).json( { message: "Product not found" } )
-        return
-    }
-    res.json(product)
-})
+// PUT /products/:id แก้ไขสินค้าตาม id
+router.put('/products/:id', productController.updateProduct)
 
-//POST /products สำหรับเพิ่มข้อมูลสินค้า
-router.post('/products', (req: Request, res: Response): void => {
-    if (!req.body) {
-        res.status(400).json({ message: "Request body is missing" })
-        return
-    }
-    const { id, name, price } = req.body
-    if (!id || !name || !price) {
-        res.status(400).json({ message: "Missing required fields" })
-        return
-    }
-    console.log(req.body)
-
-    products.push({ id, name, price })
-    res.json({ message: "Product added successfully" })
-})
-
-// DELETE /products/:id
-router.delete('/products/:id', (req: Request, res: Response): void => {
-    const id = req.params.id
-
-    const index = products.findIndex(product => product.id === id)
-
-    if (index === -1) {
-        res.status(404).json({ message: "Product not found" })
-        return
-    }
-
-    products.splice(index, 1)
-    res.json({ message: "Product deleted successfully" })
-})
+// DELETE /products/:id ลบสินค้าตาม id
+router.delete('/products/:id', productController.deleteProduct)
 
 export default router
